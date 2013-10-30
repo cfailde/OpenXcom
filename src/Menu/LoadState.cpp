@@ -54,9 +54,9 @@ LoadState::LoadState(Game *game, OptionsOrigin origin) : SavedGameState(game, or
  * @param origin Game section that originated this state.
  * @param showMsg True if need to show messages like "Loading game" or "Saving game".
  */
-LoadState::LoadState(Game *game, OptionsOrigin origin, bool showMsg) : SavedGameState(game, origin, 0,showMsg)
+LoadState::LoadState(Game *game, OptionsOrigin origin, bool showMsg, std::string filename) : SavedGameState(game, origin, 0, showMsg)
 {
-	quickLoad("autosave");
+	quickLoad(filename);
 }
 
 /**

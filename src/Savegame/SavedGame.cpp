@@ -221,6 +221,10 @@ std::vector<std::string> SavedGame::getList(TextList *list, Language *lang, std:
 void SavedGame::load(const std::string &filename, Ruleset *rule)
 {
 	std::string s = Options::getUserFolder() + filename + ".sav";
+	if (!CrossPlatform::fileExists(s))
+	{
+		throw Exception(filename + " save file not found");
+	}
 	std::vector<YAML::Node> file = YAML::LoadAllFromFile(s);
 	if (file.empty())
 	{
@@ -335,7 +339,7 @@ void SavedGame::load(const std::string &filename, Ruleset *rule)
 		std::string research = it->as<std::string>();
 		_discovered.push_back(rule->getResearch(research));
 	}
-	
+
 	const YAML::Node &research = doc["poppedResearch"];
 	for(YAML::const_iterator it = research.begin(); it != research.end(); ++it)
 	{
@@ -825,7 +829,7 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 			continue;
 		}
 		std::vector<const RuleResearch *>::const_iterator itDiscovered = std::find(discovered.begin (), discovered.end (), research);
-		
+
 		bool liveAlien = ruleset->getUnit(research->getName()) != 0;
 
 		if (itDiscovered != discovered.end ())
@@ -851,7 +855,7 @@ void SavedGame::getAvailableResearchProjects (std::vector<RuleResearch *> & proj
 				}
 				std::vector<std::string>::const_iterator leaderCheck = std::find(research->getUnlocked().begin(), research->getUnlocked().end(), "STR_LEADER_PLUS");
 				std::vector<std::string>::const_iterator cmnderCheck = std::find(research->getUnlocked().begin(), research->getUnlocked().end(), "STR_CYDONIA_DEP");
-				
+
 				bool leader ( leaderCheck != research->getUnlocked().end());
 				bool cmnder ( cmnderCheck != research->getUnlocked().end());
 
@@ -944,7 +948,7 @@ bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const R
 		return true;
 	}
 	else if (liveAlien)
-	{		
+	{
 		if (!r->getGetOneFree().empty())
 		{
 			for (std::vector<std::string>::const_iterator itFree = r->getGetOneFree().begin(); itFree != r->getGetOneFree().end(); ++itFree)
@@ -956,7 +960,7 @@ bool SavedGame::isResearchAvailable (RuleResearch * r, const std::vector<const R
 			}
 			std::vector<std::string>::const_iterator leaderCheck = std::find(r->getUnlocked().begin(), r->getUnlocked().end(), "STR_LEADER_PLUS");
 			std::vector<std::string>::const_iterator cmnderCheck = std::find(r->getUnlocked().begin(), r->getUnlocked().end(), "STR_CYDONIA_DEP");
-				
+
 			bool leader ( leaderCheck != r->getUnlocked().end());
 			bool cmnder ( cmnderCheck != r->getUnlocked().end());
 
@@ -1294,7 +1298,7 @@ std::vector<int> SavedGame::getResearchScores()
 }
 
 /**
- * return if the player has been 
+ * return if the player has been
  * warned about poor performance.
  * @return true or false.
  */

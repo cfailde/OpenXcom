@@ -35,7 +35,7 @@ public:
 	/// Creates the Load Game state.
 	LoadState(Game *game, OptionsOrigin origin);
 	/// Creates the Quick Load Game state.
-	LoadState(Game *game, OptionsOrigin origin, bool showMsg);
+	LoadState(Game *game, OptionsOrigin origin, bool showMsg, std::string filename = "autosave");
 	/// Cleans up the Load Game state.
 	~LoadState();
 	/// Handler for clicking the Saves list.
