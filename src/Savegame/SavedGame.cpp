@@ -221,6 +221,10 @@ std::vector<std::string> SavedGame::getList(TextList *list, Language *lang, std:
 void SavedGame::load(const std::string &filename, Ruleset *rule)
 {
 	std::string s = Options::getUserFolder() + filename + ".sav";
+	if (!CrossPlatform::fileExists(s))
+	{
+		throw Exception(filename + " save file not found");
+	}
 	std::vector<YAML::Node> file = YAML::LoadAllFromFile(s);
 	if (file.empty())
 	{

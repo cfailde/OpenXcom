@@ -21,6 +21,7 @@
 #include "../Engine/Game.h"
 #include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -120,6 +121,15 @@ void MainMenuState::init()
 {
 	// Set palette
 	_game->setPalette(_game->getResourcePack()->getPalette("BACKPALS.DAT")->getColors(Palette::blockOffset(0)), Palette::backPos, 16);
+
+	// Load a save file if supplied on the command line
+	std::string filename = Options::getString("load");
+	if(!filename.empty())
+	{
+		Options::setString("load", "");
+		Options::save();
+		_game->pushState(new LoadState(_game, OPT_MENU, false, filename));
+	}
 }
 
 /**
